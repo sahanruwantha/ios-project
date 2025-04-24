@@ -1,0 +1,76 @@
+# Project specific
+Backend/venv/
+Backend/__pycache__/
+Backend/*.pyc
+Backend/*.db
+Backend/.env
+
+CommuintyAlert/build/
+CommuintyAlert/DerivedData/
+CommuintyAlert/*.xcuserstate
+CommuintyAlert/*.xcworkspace/
+CommuintyAlert/Pods/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*~
+
+# Documentation
+docs/_build/
+site/
+
+# Dependencies
+node_modules/
+bower_components/
+
+# Build outputs
+dist/
+build/
+out/
+*.pyc
+__pycache__/
+
+# Package files
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# Local configuration
+config.local.js
+*.local.json
+*.local.yaml
+*.local.yml 

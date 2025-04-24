@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to show nearby alerts and resources</string>
+    
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>We need your location to provide alerts even when the app is in the background</string>
+    
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>We need access to your photos to allow you to attach images to reports</string>
+    
+    <key>NSFaceIDUsageDescription</key>
+    <string>We use Face ID to securely authenticate you</string>
+    
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>location</string>
+    </array>
+    
+    <key>NSLocationDefaultAccuracyReduced</key>
+    <false/>
+    
+    <key>NSLocationTemporaryUsageDescriptionDictionary</key>
+    <dict>
+        <key>LocationAccuracyAuthorizationFull</key>
+        <string>We need precise location to provide accurate alerts</string>
+    </dict>
+</dict>
+</plist> 
