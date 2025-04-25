@@ -20,14 +20,14 @@ class NetworkService {
         self.authToken = UserDefaults.standard.string(forKey: "token")
     }
     
-    // Add method to update token
+    // Updates the authentication token used for API requests
     func updateAuthToken(_ token: String) {
         self.authToken = token
         UserDefaults.standard.set(token, forKey: "token")
     }
     
-    // MARK: - Authentication
-    
+    // Creates a new user account with the provided credentials
+    // Returns auth response containing token and user info
     func register(email: String, password: String, fullName: String, phoneNumber: String) async throws -> AuthResponse {
         let endpoint = "\(baseURL)/auth/register"
         let body = [
@@ -40,6 +40,8 @@ class NetworkService {
         return try await performRequest(endpoint: endpoint, method: "POST", body: body)
     }
     
+    // Authenticates an existing user and returns their session token
+    // Throws an error if credentials are invalid
     func login(email: String, password: String) async throws -> AuthResponse {
         let endpoint = "\(baseURL)/auth/login"
         guard var urlComponents = URLComponents(string: endpoint) else {
@@ -72,8 +74,8 @@ class NetworkService {
         return try await performRequest(endpoint: endpoint, method: "POST", body: body)
     }
     
-    // MARK: - Alerts
-    
+    // Gets nearby alerts based on user's location and specified radius
+    // All parameters are optional - if not provided, uses default server settings
     func getAlerts(latitude: Double? = nil, longitude: Double? = nil, radius: Double? = nil) async throws -> [Alert] {
         var endpoint = "\(baseURL)/alerts"
         if let lat = latitude, let lon = longitude, let rad = radius {
@@ -83,6 +85,8 @@ class NetworkService {
         return try await performRequest(endpoint: endpoint, method: "GET")
     }
     
+    // Submits a new community alert to the server
+    // Returns the created alert with server-generated ID and timestamp
     func createAlert(alert: Alert) async throws -> Alert {
         let endpoint = "\(baseURL)/alerts"
         let body: [String: Any] = [
@@ -101,7 +105,12 @@ class NetworkService {
         return try await performRequest(endpoint: endpoint, method: "POST", body: body)
     }
     
-    // MARK: - User Preferences
+    // Fetches nearby community resources like shelters, hospitals etc.
+    // within the specified radius from given coordinates
+    func getCommunityResources(latitude: Double, longitude: Double, radius: Double) async throws -> [CommunityResource] {
+        let endpoint = "\(baseURL)/resources/nearby?latitude=\(latitude)&longitude=\(longitude)&radius=\(radius)"
+        return try await performRequest(endpoint: endpoint, method: "GET")
+    }
     
     func getUserPreferences() async throws -> UserPreferences {
         let userId = try getUserId()
@@ -126,15 +135,6 @@ class NetworkService {
         
         return try await performRequest(endpoint: endpoint, method: "PUT", body: body)
     }
-    
-    // MARK: - Community Resources
-    
-    func getCommunityResources(latitude: Double, longitude: Double, radius: Double) async throws -> [CommunityResource] {
-        let endpoint = "\(baseURL)/resources/nearby?latitude=\(latitude)&longitude=\(longitude)&radius=\(radius)"
-        return try await performRequest(endpoint: endpoint, method: "GET")
-    }
-    
-    // MARK: - Helper Methods
     
     private func getUserId() throws -> String {
         guard let userId = UserDefaults.standard.string(forKey: "userId") else {
@@ -169,7 +169,6 @@ class NetworkService {
             throw NetworkError.serverError("Invalid response")
         }
         
-        // Debug response
         print("Debug: Response status code: \(httpResponse.statusCode)")
         if let responseString = String(data: data, encoding: .utf8) {
             print("Debug: Response body: \(responseString)")
@@ -206,8 +205,6 @@ class NetworkService {
         }
     }
 }
-
-// MARK: - Response Models
 
 struct AuthResponse: Codable {
     let userId: String

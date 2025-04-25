@@ -178,4 +178,49 @@ struct User: Codable {
     let lastLogin: Date
 }
 
-// Remove dummy data as we'll be using real data from the API 
+class BiometricAuthManager {
+    static let shared = BiometricAuthManager()
+    private let context = LAContext()
+    private var error: NSError?
+    
+    private init() {}
+    
+    var biometricType: String {
+        let _ = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        switch context.biometryType {
+        case .faceID:
+            return "Face ID"
+        case .touchID:
+            return "Touch ID"
+        default:
+            return "None"
+        }
+    }
+    
+    var isBiometricAvailable: Bool {
+        return context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+    }
+    
+    func authenticateUser() async throws -> Bool {
+        guard isBiometricAvailable else {
+            throw AuthError.biometricNotAvailable
+        }
+        
+        return try await context.evaluatePolicy(
+            .deviceOwnerAuthenticationWithBiometrics,
+            localizedReason: "Log in to your account"
+        )
+    }
+}
+
+enum AuthError: LocalizedError {
+    case biometricNotAvailable
+    
+    var errorDescription: String? {
+        switch self {
+        case .biometricNotAvailable:
+            return "Biometric authentication is not available on this device"
+        }
+    }
+}
+

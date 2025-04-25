@@ -15,8 +15,9 @@ class CoreDataManager: ObservableObject {
         }
     }
     
-    // MARK: - Alert History Methods
     
+    // Saves a new alert to the local history database
+    // This helps track which alerts the user has interacted with
     func saveAlert(_ alert: Alert) {
         let alertHistory = AlertHistory(context: container.viewContext)
         alertHistory.id = alert.id
@@ -30,6 +31,8 @@ class CoreDataManager: ObservableObject {
         save()
     }
     
+    // Retrieves the user's complete alert history from local storage
+    // Returns an array of past alerts sorted by date
     func fetchAlertHistory() -> [AlertHistory] {
         let request = NSFetchRequest<AlertHistory>(entityName: "AlertHistory")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \AlertHistory.createdAt, ascending: false)]
@@ -42,8 +45,9 @@ class CoreDataManager: ObservableObject {
         }
     }
     
-    // MARK: - User Settings Methods
     
+    // Persists user preferences and settings to CoreData
+    // These settings persist even when the user logs out
     func saveUserSettings(userId: String, colorScheme: Int16, notificationsEnabled: Bool) {
         let request = NSFetchRequest<UserSettings>(entityName: "UserSettings")
         request.predicate = NSPredicate(format: "userId == %@", userId)
@@ -68,6 +72,8 @@ class CoreDataManager: ObservableObject {
         }
     }
     
+    // Retrieves stored settings for a specific user
+    // Returns nil if no settings exist for the user
     func getUserSettings(userId: String) -> UserSettings? {
         let request = NSFetchRequest<UserSettings>(entityName: "UserSettings")
         request.predicate = NSPredicate(format: "userId == %@", userId)
@@ -81,8 +87,9 @@ class CoreDataManager: ObservableObject {
         }
     }
     
-    // MARK: - Utility Methods
     
+    // Commits any pending changes to CoreData
+    // Called internally after any data modifications
     private func save() {
         do {
             try container.viewContext.save()

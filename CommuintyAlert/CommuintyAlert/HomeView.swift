@@ -1,7 +1,6 @@
 import SwiftUI
 import MapKit
 
-// Create a protocol for map items
 protocol MapItem: Identifiable {
     var coordinate: CLLocationCoordinate2D { get }
     var displayTitle: String { get }
@@ -119,6 +118,8 @@ struct HomeView: View {
         }
     }
     
+    // Fetches nearby alerts based on current location
+    // Updates the UI with new alerts and handles error states
     private func fetchAlerts() async {
         isLoading = true
         errorMessage = nil
@@ -334,6 +335,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         #endif
     }
     
+    // Handles location updates from the device
+    // Updates map view and triggers alert fetching when location changes
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.last
     }

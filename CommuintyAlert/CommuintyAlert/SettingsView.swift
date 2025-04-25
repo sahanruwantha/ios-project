@@ -85,7 +85,7 @@ struct SettingsView: View {
             
             Spacer()
             
-            // Logout Button
+            // Logout 
             Button(action: {
                 // Handle logout
                 UserDefaults.standard.removeObject(forKey: "token")

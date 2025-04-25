@@ -21,6 +21,8 @@ class SoundManager: ObservableObject {
         }
     }
     
+    // Plays a specific alert sound from the app's sound library
+    // Handles audio session setup and error handling
     func playSound(_ sound: AlertSound) {
         guard let soundURL = Bundle.main.url(forResource: sound.rawValue, withExtension: "wav") else {
             print("Could not find sound file: \(sound.filename)")
@@ -36,11 +38,14 @@ class SoundManager: ObservableObject {
         }
     }
     
+    // Immediately stops any currently playing alert sound
+    // Used when alerts are dismissed or new sounds need to play
     func stopSound() {
         audioPlayer?.stop()
     }
     
-    // Play sound based on alert priority
+    // Selects and plays appropriate alert sound based on priority level
+    // Higher priority alerts have more attention-grabbing sounds
     func playAlertSound(for priority: AlertPriority) {
         switch priority {
         case .immediate:
